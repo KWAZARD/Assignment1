@@ -24,7 +24,7 @@ Node* AddNodeToLast(Node* head, Node* newNode)
     if (head == NULL)
     {
         head = newNode;
-        return;
+        return head;
     }
     Node* current = head;
     while (current->nextNode != NULL)
@@ -34,41 +34,6 @@ Node* AddNodeToLast(Node* head, Node* newNode)
     current->nextNode = newNode;
     return head;
 }
-
-
-
-
-
-
-Node* InsertAtIndex(Node* head, Node* insertedNode, int index)
-{
-    if (head == NULL)
-    {
-        printf("Linked list does not exist");
-        return;
-    }
-    Node* current;
-    current = head;
-    int iteration = 0;
-    while (iteration != index && current != NULL)
-    {
-        current = current->nextNode;
-    }
-    if (current == NULL && iteration != index)
-    {
-        printf("Index is to big, there is no previous element");
-        return;
-    }
-    insertedNode->nextNode = current->nextNode;
-    current->nextNode = insertedNode;
-    printf("Text is inserted");
-    return head;
-}
-
-
-
-
-
 
 
 Node* CaseOne(Node* head)
@@ -108,21 +73,187 @@ Node* CaseTwo(Node* head)
     return head;
 }
 
-Node* CaseThree(Node* head)
+void CaseThree(Node* head)
 {
-    while (getchar() != '\n');
-    printf(">New line is started\n");
-
-    Node* slashnNode = (Node*)malloc(sizeof(Node));
-
-    slashnNode->thisChar = '\n';
-    slashnNode->nextNode = NULL;
-
-    head = AddNodeToLast(head, slashnNode);
-
-    return head;
+    printf(">");
+    Node* current = head;
+    if (current == NULL)
+    {
+        printf_s("There is no text to print\n");
+        return;
+    }
+    
+    while (current != NULL)
+    {
+        printf("%c", current->thisChar);
+        current = current->nextNode;
+    }
+    printf("\n");
+    
 }
 
+
+Node* CaseFour(Node* head)
+{
+    int line;
+    int index;
+    printf(">Choose line: ");
+    if (scanf_s("%d", &line) != 1) return head;
+    printf(">Choose index: ");
+    if (scanf_s("%d", &index) != 1) return head;
+
+    char a;
+    while ((a = getchar()) != '\n' && a != EOF) continue;
+
+    printf("Enter text to append: ");
+    Node* insertedHead = NULL;
+
+    while ((a = getchar()) != '\n' && a != EOF)
+    {
+        Node* newNode = (Node*)malloc(sizeof(Node));
+        if (newNode == NULL) return head;
+        newNode->thisChar = a;
+        newNode->nextNode = NULL;
+        insertedHead = AddNodeToLast(insertedHead, newNode);
+    }
+
+
+    if (insertedHead == NULL) return head;
+
+
+    int countLine = 0;
+    int indexInLine = 0;
+
+    Node* current = head;
+    Node* previous = NULL;
+
+    while (current != NULL && !(countLine == line && indexInLine == index))
+    {
+        if (current->thisChar == '\n')
+        {
+            countLine++;
+            indexInLine = -1;
+        }
+        previous = current;
+        current = current->nextNode;
+        indexInLine++;
+    }
+
+
+    if (!(countLine == line && indexInLine == index))
+    {
+        printf("This line or index does not exist\n");
+        Node* currentNow = insertedHead;
+        while (currentNow != NULL)
+        {
+            Node* nextNow = currentNow->nextNode;
+            free(currentNow);
+            currentNow = nextNow;
+        }
+        return head;
+    }
+
+
+    Node* insertedLast = insertedHead;
+
+    while (insertedLast->nextNode != NULL)
+    {
+        insertedLast = insertedLast->nextNode;
+    }
+
+    insertedLast->nextNode = current;
+    if (previous == NULL)
+    {
+        head = insertedHead;
+    }
+    else
+    {
+        previous->nextNode = insertedHead;
+    }
+
+    printf("Text is successfully inserted!\n");
+    return head;
+
+}
+
+void CaseFour(Node* head)
+{
+    
+    char a;
+    while ((a = getchar()) != '\n' && a != EOF) continue;
+
+    printf("Enter text to search: ");
+    Node* searchHead = NULL;
+
+    while ((a = getchar()) != '\n' && a != EOF)
+    {
+        Node* newNode = (Node*)malloc(sizeof(Node));
+        if (newNode == NULL) return head;
+        newNode->thisChar = a;
+        newNode->nextNode = NULL;
+        searchHead = AddNodeToLast(searchHead, newNode);
+    }
+
+
+    if (searchHead == NULL) return head;
+
+
+    int countLine = 0;
+    int indexInLine = 0;
+
+    Node* current = head;
+    Node* previous = NULL;
+
+    while (current != NULL)
+    {
+        if (current == searchHead)
+        {
+            while (current->nextNode == searchHead->nextNode)
+            {
+                continue;
+            }
+        }
+        previous = current;
+        current = current->nextNode;
+        indexInLine++;
+    }
+
+
+    if (!(countLine == 1 && indexInLine == 1))
+    {
+        printf("This line or index does not exist\n");
+        Node* currentNow = searchHead;
+        while (currentNow != NULL)
+        {
+            Node* nextNow = currentNow->nextNode;
+            free(currentNow);
+            currentNow = nextNow;
+        }
+        return;
+    }
+
+
+    Node* insertedLast = searchHead;
+
+    while (insertedLast->nextNode != NULL)
+    {
+        insertedLast = insertedLast->nextNode;
+    }
+
+    insertedLast->nextNode = current;
+    if (previous == NULL)
+    {
+        head = searchHead;
+    }
+    else
+    {
+        previous->nextNode = searchHead;
+    }
+
+    printf("Text is successfully inserted!\n");
+    return;
+
+}
 //===========================================FILE MANIPULATIONS===================================================================================
 
 void SaveFile(Node* head)
@@ -153,8 +284,6 @@ void SaveFile(Node* head)
     }
 }
 
-
-
 Node* LoadFile()
 {
     FILE* file;
@@ -166,14 +295,14 @@ Node* LoadFile()
     if (scanf_s("%255s", name, (unsigned int)sizeof(name)) != 1)
     {
         printf("Invalid input.\n");
-        return;
+        return head;
     }
 
     strcat_s(name, sizeof(name), ".txt");
     if (fopen_s(&file, name, "r") != 0)
     {
         printf("Error opening file\n");
-        return;
+        return head;
     }
     int ch;
     while ((ch = fgetc(file)) != EOF)
@@ -201,6 +330,11 @@ Node* LoadFile()
 
 
 //===========================================MAIN===================================================================================
+
+
+static struct Node* head = NULL;
+static struct Node* last = NULL;
+
 int main()
 {
 
@@ -214,7 +348,7 @@ int main()
         "7-Use files to save the information\n"
         ">Choose options\n");
     
-    Node* head = NULL;
+   
     Node* current;
     while (true)
     {
@@ -237,10 +371,10 @@ int main()
             head = CaseTwo(head);
             break; 
         case 3:
-            printf(">This command is not implemented");
+            CaseThree(head);
             break;
         case 4:
-            printf(">This command is not implemented");
+            head = CaseFour(head);
             break; 
         case 5:
             printf(">This command is not implemented");
