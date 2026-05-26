@@ -40,11 +40,11 @@ Node* CaseOne(Node* head)
 {
     while (getchar() != '\n');
     printf(">Append text symbols to the end:\n");
-    
+
 
     char a;
-    
-    
+
+
 
     while ((a = getchar()) != '\n' && a != EOF)
     {
@@ -62,14 +62,14 @@ Node* CaseTwo(Node* head)
 {
     while (getchar() != '\n');
     printf(">New line is started\n");
-    
+
     Node* slashnNode = (Node*)malloc(sizeof(Node));
-    
+
     slashnNode->thisChar = '\n';
     slashnNode->nextNode = NULL;
 
     head = AddNodeToLast(head, slashnNode);
-    
+
     return head;
 }
 
@@ -82,14 +82,14 @@ void CaseThree(Node* head)
         printf_s("There is no text to print\n");
         return;
     }
-    
+
     while (current != NULL)
     {
         printf("%c", current->thisChar);
         current = current->nextNode;
     }
     printf("\n");
-    
+
 }
 
 
@@ -176,13 +176,9 @@ Node* CaseFour(Node* head)
 
 }
 
-<<<<<<< HEAD
 void CaseFive(Node* head)
-=======
-void CaseFour(Node* head)
->>>>>>> c210f83ac437513225d41fb4b3893acb92038055
 {
-    
+
     char a;
     while ((a = getchar()) != '\n' && a != EOF) continue;
 
@@ -206,8 +202,7 @@ void CaseFour(Node* head)
     int indexInLine = 0;
 
     Node* current = head;
-<<<<<<< HEAD
-    
+
     bool found = false;
 
     while (current != NULL)
@@ -216,10 +211,10 @@ void CaseFour(Node* head)
         Node* searched = searchHead;
         while (searched != NULL && checked != NULL && checked->thisChar == searched->thisChar)
         {
-            
+
             searched = searched->nextNode;
             checked = checked->nextNode;
-            
+
         }
 
 
@@ -238,59 +233,7 @@ void CaseFour(Node* head)
         current = current->nextNode;
         indexInLine++;
     }
-    
-=======
-    Node* previous = NULL;
 
-    while (current != NULL)
-    {
-        if (current == searchHead)
-        {
-            while (current->nextNode == searchHead->nextNode)
-            {
-                continue;
-            }
-        }
-        previous = current;
-        current = current->nextNode;
-        indexInLine++;
-    }
-
-
-    if (!(countLine == 1 && indexInLine == 1))
-    {
-        printf("This line or index does not exist\n");
-        Node* currentNow = searchHead;
-        while (currentNow != NULL)
-        {
-            Node* nextNow = currentNow->nextNode;
-            free(currentNow);
-            currentNow = nextNow;
-        }
-        return;
-    }
-
-
-    Node* insertedLast = searchHead;
-
-    while (insertedLast->nextNode != NULL)
-    {
-        insertedLast = insertedLast->nextNode;
-    }
-
-    insertedLast->nextNode = current;
-    if (previous == NULL)
-    {
-        head = searchHead;
-    }
-    else
-    {
-        previous->nextNode = searchHead;
-    }
-
-    printf("Text is successfully inserted!\n");
-    return;
->>>>>>> c210f83ac437513225d41fb4b3893acb92038055
 
 }
 //===========================================FILE MANIPULATIONS===================================================================================
@@ -298,12 +241,12 @@ void CaseFour(Node* head)
 void SaveFile(Node* head)
 {
     printf(">Enter file name: ");
-    
+
     FILE* file;
     char name[260];
 
 
-    if (scanf_s("%255s", name, (unsigned int)sizeof(name)) != 1) 
+    if (scanf_s("%255s", name, (unsigned int)sizeof(name)) != 1)
     {
         printf("Invalid input.\n");
         return;
@@ -317,7 +260,7 @@ void SaveFile(Node* head)
         while (current != NULL)
         {
             fputc(current->thisChar, file);
-            current = current->nextNode;    
+            current = current->nextNode;
         }
         fclose(file);
     }
@@ -379,20 +322,20 @@ int main()
 
     int user_choise;
     printf("1-Append text symbols to the end\n"
-        "2-Start the new line\n" 
+        "2-Start the new line\n"
         "3-Print the current text to console\n"
         "4-Insert the text by line and symbol index\n"
         "5-Search(please note that the text can be found more than once)\n"
         "6-Use files to load the information\n"
         "7-Use files to save the information\n"
         ">Choose options\n");
-    
-   
+
+
     Node* current;
     while (true)
     {
         printf(">");
-        
+
         if (scanf_s("%d", &user_choise) != 1)
         {
             printf("Please enter right number\n");
@@ -403,36 +346,36 @@ int main()
         switch (user_choise)
         {
         case 1:
-            
+
             head = CaseOne(head);
             break;
         case 2:
             head = CaseTwo(head);
-            break; 
+            break;
         case 3:
             CaseThree(head);
             break;
         case 4:
             head = CaseFour(head);
-            break; 
+            break;
         case 5:
             CaseFive(head);
             break;
         case 6:
-            
+
             head = LoadFile();
             break;
         case 7:
             SaveFile(head);
-            
+
             return 0;
         default:
             printf(">This command is not valid");
             break;
-            
+
         }
     }
-    
+
     return 0;
 }
 
