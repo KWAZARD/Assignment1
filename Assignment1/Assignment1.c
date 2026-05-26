@@ -176,7 +176,11 @@ Node* CaseFour(Node* head)
 
 }
 
+<<<<<<< HEAD
 void CaseFive(Node* head)
+=======
+void CaseFour(Node* head)
+>>>>>>> c210f83ac437513225d41fb4b3893acb92038055
 {
     
     char a;
@@ -202,6 +206,7 @@ void CaseFive(Node* head)
     int indexInLine = 0;
 
     Node* current = head;
+<<<<<<< HEAD
     
     bool found = false;
 
@@ -234,6 +239,58 @@ void CaseFive(Node* head)
         indexInLine++;
     }
     
+=======
+    Node* previous = NULL;
+
+    while (current != NULL)
+    {
+        if (current == searchHead)
+        {
+            while (current->nextNode == searchHead->nextNode)
+            {
+                continue;
+            }
+        }
+        previous = current;
+        current = current->nextNode;
+        indexInLine++;
+    }
+
+
+    if (!(countLine == 1 && indexInLine == 1))
+    {
+        printf("This line or index does not exist\n");
+        Node* currentNow = searchHead;
+        while (currentNow != NULL)
+        {
+            Node* nextNow = currentNow->nextNode;
+            free(currentNow);
+            currentNow = nextNow;
+        }
+        return;
+    }
+
+
+    Node* insertedLast = searchHead;
+
+    while (insertedLast->nextNode != NULL)
+    {
+        insertedLast = insertedLast->nextNode;
+    }
+
+    insertedLast->nextNode = current;
+    if (previous == NULL)
+    {
+        head = searchHead;
+    }
+    else
+    {
+        previous->nextNode = searchHead;
+    }
+
+    printf("Text is successfully inserted!\n");
+    return;
+>>>>>>> c210f83ac437513225d41fb4b3893acb92038055
 
 }
 //===========================================FILE MANIPULATIONS===================================================================================
