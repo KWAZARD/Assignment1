@@ -233,6 +233,10 @@ void CaseFive(Node* head)
         current = current->nextNode;
         indexInLine++;
     }
+    if (!found)
+    {
+        printf("There is no such text\n");
+    }
 
 
 }
