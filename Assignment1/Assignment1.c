@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-typedef struct {
+typedef struct Node{
     char thisChar;
     struct Node* nextNode;
 }Node;
@@ -33,6 +33,17 @@ Node* AddNodeToLast(Node* head, Node* newNode)
     }
     current->nextNode = newNode;
     return head;
+}
+
+void FreeList(Node* head)
+{
+    Node* current = head;
+    while (current != NULL)
+    {
+        Node* nextNode = current->nextNode;
+        free(current);
+        current = nextNode;
+    }
 }
 
 
@@ -143,13 +154,7 @@ Node* CaseFour(Node* head)
     if (!(countLine == line && indexInLine == index))
     {
         printf("This line or index does not exist\n");
-        Node* currentNow = insertedHead;
-        while (currentNow != NULL)
-        {
-            Node* nextNow = currentNow->nextNode;
-            free(currentNow);
-            currentNow = nextNow;
-        }
+        FreeList(insertedHead);
         return head;
     }
 
@@ -188,14 +193,21 @@ void CaseFive(Node* head)
     while ((a = getchar()) != '\n' && a != EOF)
     {
         Node* newNode = (Node*)malloc(sizeof(Node));
-        if (newNode == NULL) return head;
+        if (newNode == NULL)
+        {
+            return;
+        }
         newNode->thisChar = a;
         newNode->nextNode = NULL;
         searchHead = AddNodeToLast(searchHead, newNode);
     }
 
 
-    if (searchHead == NULL) return head;
+    if (searchHead == NULL)
+    {
+        printf("Search text is empty\n");
+        return;
+    }
 
 
     int countLine = 0;
@@ -237,6 +249,8 @@ void CaseFive(Node* head)
     {
         printf("There is no such text\n");
     }
+    
+    FreeList(searchHead);
 
 
 }
@@ -318,8 +332,8 @@ Node* LoadFile()
 //===========================================MAIN===================================================================================
 
 
-static struct Node* head = NULL;
-static struct Node* last = NULL;
+static Node* head = NULL;
+static Node* last = NULL;
 
 int main()
 {
@@ -332,6 +346,7 @@ int main()
         "5-Search(please note that the text can be found more than once)\n"
         "6-Use files to load the information\n"
         "7-Use files to save the information\n"
+        "8-Finish program\n"
         ">Choose options\n");
 
 
@@ -366,12 +381,14 @@ int main()
             CaseFive(head);
             break;
         case 6:
-
+            FreeList(head);
             head = LoadFile();
             break;
         case 7:
             SaveFile(head);
-
+            break;
+        case 8:
+            printf("Program is finished");
             return 0;
         default:
             printf(">This command is not valid");
