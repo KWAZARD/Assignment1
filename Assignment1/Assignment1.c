@@ -5,327 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "Functions.h"
 
-typedef struct Node{
-    char thisChar;
-    struct Node* nextNode;
-}Node;
-
-Node* CreateLinkedList(char firstChar)
-{
-    Node* head = (Node*)malloc(sizeof(Node));
-    head->thisChar = firstChar;
-    head->nextNode = NULL;
-    return head;
-
-}
-Node* AddNodeToLast(Node* head, Node* newNode)
-{
-    if (head == NULL)
-    {
-        head = newNode;
-        return head;
-    }
-    Node* current = head;
-    while (current->nextNode != NULL)
-    {
-        current = current->nextNode;
-    }
-    current->nextNode = newNode;
-    return head;
-}
-
-void FreeList(Node* head)
-{
-    Node* current = head;
-    while (current != NULL)
-    {
-        Node* nextNode = current->nextNode;
-        free(current);
-        current = nextNode;
-    }
-}
-
-
-Node* CaseOne(Node* head)
-{
-    while (getchar() != '\n');
-    printf(">Append text symbols to the end:\n");
-
-
-    char a;
-
-
-
-    while ((a = getchar()) != '\n' && a != EOF)
-    {
-        Node* newNode = (Node*)malloc(sizeof(Node));
-        newNode->thisChar = a;
-        newNode->nextNode = NULL;
-        head = AddNodeToLast(head, newNode);
-    }
-    return head;
-}
-
-
-
-Node* CaseTwo(Node* head)
-{
-    while (getchar() != '\n');
-    printf(">New line is started\n");
-
-    Node* slashnNode = (Node*)malloc(sizeof(Node));
-
-    slashnNode->thisChar = '\n';
-    slashnNode->nextNode = NULL;
-
-    head = AddNodeToLast(head, slashnNode);
-
-    return head;
-}
-
-void CaseThree(Node* head)
-{
-    printf(">");
-    Node* current = head;
-    if (current == NULL)
-    {
-        printf_s("There is no text to print\n");
-        return;
-    }
-
-    while (current != NULL)
-    {
-        printf("%c", current->thisChar);
-        current = current->nextNode;
-    }
-    printf("\n");
-
-}
-
-
-Node* CaseFour(Node* head)
-{
-    int line;
-    int index;
-    printf(">Choose line: ");
-    if (scanf_s("%d", &line) != 1) return head;
-    printf(">Choose index: ");
-    if (scanf_s("%d", &index) != 1) return head;
-
-    char a;
-    while ((a = getchar()) != '\n' && a != EOF) continue;
-
-    printf("Enter text to append: ");
-    Node* insertedHead = NULL;
-
-    while ((a = getchar()) != '\n' && a != EOF)
-    {
-        Node* newNode = (Node*)malloc(sizeof(Node));
-        if (newNode == NULL) return head;
-        newNode->thisChar = a;
-        newNode->nextNode = NULL;
-        insertedHead = AddNodeToLast(insertedHead, newNode);
-    }
-
-
-    if (insertedHead == NULL) return head;
-
-
-    int countLine = 0;
-    int indexInLine = 0;
-
-    Node* current = head;
-    Node* previous = NULL;
-
-    while (current != NULL && !(countLine == line && indexInLine == index))
-    {
-        if (current->thisChar == '\n')
-        {
-            countLine++;
-            indexInLine = -1;
-        }
-        previous = current;
-        current = current->nextNode;
-        indexInLine++;
-    }
-
-
-    if (!(countLine == line && indexInLine == index))
-    {
-        printf("This line or index does not exist\n");
-        FreeList(insertedHead);
-        return head;
-    }
-
-
-    Node* insertedLast = insertedHead;
-
-    while (insertedLast->nextNode != NULL)
-    {
-        insertedLast = insertedLast->nextNode;
-    }
-
-    insertedLast->nextNode = current;
-    if (previous == NULL)
-    {
-        head = insertedHead;
-    }
-    else
-    {
-        previous->nextNode = insertedHead;
-    }
-
-    printf("Text is successfully inserted!\n");
-    return head;
-
-}
-
-void CaseFive(Node* head)
-{
-
-    char a;
-    while ((a = getchar()) != '\n' && a != EOF) continue;
-
-    printf("Enter text to search: ");
-    Node* searchHead = NULL;
-
-    while ((a = getchar()) != '\n' && a != EOF)
-    {
-        Node* newNode = (Node*)malloc(sizeof(Node));
-        if (newNode == NULL)
-        {
-            return;
-        }
-        newNode->thisChar = a;
-        newNode->nextNode = NULL;
-        searchHead = AddNodeToLast(searchHead, newNode);
-    }
-
-
-    if (searchHead == NULL)
-    {
-        printf("Search text is empty\n");
-        return;
-    }
-
-
-    int countLine = 0;
-    int indexInLine = 0;
-
-    Node* current = head;
-
-    bool found = false;
-
-    while (current != NULL)
-    {
-        Node* checked = current;
-        Node* searched = searchHead;
-        while (searched != NULL && checked != NULL && checked->thisChar == searched->thisChar)
-        {
-
-            searched = searched->nextNode;
-            checked = checked->nextNode;
-
-        }
-
-
-        if (searched == NULL)
-        {
-            printf("Text is present in this position: %d, %d\n", countLine, indexInLine);
-            found = true;
-        }
-
-        if (current->thisChar == '\n')
-        {
-            countLine++;
-            indexInLine = -1;
-        }
-
-        current = current->nextNode;
-        indexInLine++;
-    }
-    if (!found)
-    {
-        printf("There is no such text\n");
-    }
-    
-    FreeList(searchHead);
-
-
-}
-//===========================================FILE MANIPULATIONS===================================================================================
-
-void SaveFile(Node* head)
-{
-    printf(">Enter file name: ");
-
-    FILE* file;
-    char name[260];
-
-
-    if (scanf_s("%255s", name, (unsigned int)sizeof(name)) != 1)
-    {
-        printf("Invalid input.\n");
-        return;
-    }
-
-    strcat_s(name, sizeof(name), ".txt");
-
-    if (fopen_s(&file, name, "w") == 0)
-    {
-        Node* current = head;
-        while (current != NULL)
-        {
-            fputc(current->thisChar, file);
-            current = current->nextNode;
-        }
-        fclose(file);
-    }
-}
-
-Node* LoadFile()
-{
-    FILE* file;
-
-    char name[260];
-    Node* head = NULL;
-    Node* last = NULL;
-
-    if (scanf_s("%255s", name, (unsigned int)sizeof(name)) != 1)
-    {
-        printf("Invalid input.\n");
-        return head;
-    }
-
-    strcat_s(name, sizeof(name), ".txt");
-    if (fopen_s(&file, name, "r") != 0)
-    {
-        printf("Error opening file\n");
-        return head;
-    }
-    int ch;
-    while ((ch = fgetc(file)) != EOF)
-    {
-        char symbol = (char)ch;
-        Node* newNode = (Node*)malloc(sizeof(Node));
-        newNode->thisChar = symbol;
-        newNode->nextNode = NULL;
-        if (head == NULL)
-        {
-            head = newNode;
-            last = newNode;
-        }
-        else
-        {
-            last->nextNode = newNode;
-            last = newNode;
-        }
-    }
-
-    fclose(file);
-    return head;
-}
 
 
 
@@ -346,7 +27,14 @@ int main()
         "5-Search(please note that the text can be found more than once)\n"
         "6-Use files to load the information\n"
         "7-Use files to save the information\n"
-        "8-Finish program\n"
+        "8-Delete from position\n"
+        "9-Undo\n"
+        "10-Redo\n"
+        "11-Copy\n"
+        "12-Cut\n"
+        "13-Paste\n"
+        "14-Insert with replacement\n"
+        "15-Finish program\n"
         ">Choose options\n");
 
 
@@ -365,19 +53,49 @@ int main()
         switch (user_choise)
         {
         case 1:
+            remove("undo3.txt");
+            rename("undo2.txt", "undo3.txt");
+            remove("undo2.txt");
+            rename("undo1.txt", "undo2.txt");
+            SaveWithName("undo1.txt", head);
+            remove("redo1.txt");
+            remove("redo2.txt");
+            remove("redo3.txt");
 
             head = CaseOne(head);
             break;
         case 2:
+            remove("undo3.txt");
+            rename("undo2.txt", "undo3.txt");
+            remove("undo2.txt");
+            rename("undo1.txt", "undo2.txt");
+            SaveWithName("undo1.txt", head);
+            remove("redo1.txt");
+            remove("redo2.txt");
+            remove("redo3.txt");
+
             head = CaseTwo(head);
             break;
         case 3:
+            
+
             CaseThree(head);
             break;
         case 4:
+            remove("undo3.txt");
+            rename("undo2.txt", "undo3.txt");
+            remove("undo2.txt");
+            rename("undo1.txt", "undo2.txt");
+            SaveWithName("undo1.txt", head);
+            remove("redo1.txt");
+            remove("redo2.txt");
+            remove("redo3.txt");
+
             head = CaseFour(head);
             break;
         case 5:
+            
+
             CaseFive(head);
             break;
         case 6:
@@ -387,7 +105,191 @@ int main()
         case 7:
             SaveFile(head);
             break;
+        
         case 8:
+        {
+            remove("undo3.txt");
+            rename("undo2.txt", "undo3.txt");
+            remove("undo2.txt");
+            rename("undo1.txt", "undo2.txt");
+            SaveWithName("undo1.txt", head);
+            remove("redo1.txt");
+            remove("redo2.txt");
+            remove("redo3.txt");
+
+            int line;
+            int index;
+            int length;
+            printf(">Choose line: ");
+            if (scanf_s("%d", &line) != 1) return;
+            printf(">Choose index: ");
+            if (scanf_s("%d", &index) != 1) return;
+            printf(">Choose length: ");
+            if (scanf_s("%d", &length) != 1) return;
+            head = DeleteCase(head, line, index, length);
+            
+            
+            break;
+        }
+        case 9:
+        {
+              
+            FILE* fileCheck = fopen("undo1.txt", "r");
+            if (fileCheck != NULL)
+            {
+                       
+                fclose(fileCheck);
+                remove("redo3.txt");
+                rename("redo2.txt", "redo3.txt");
+                remove("redo2.txt");
+                rename("redo1.txt", "redo2.txt");
+                SaveWithName("redo1.txt", head);
+
+                FreeList(head);
+                head = LoadWithName("undo1.txt");
+
+                remove("undo1.txt");
+                rename("undo2.txt", "undo1.txt");
+                remove("undo2.txt");
+                rename("undo3.txt", "undo2.txt");
+            }
+            else
+            {
+                printf("Файл не існує.\n");
+            }
+                
+            
+            break;
+        }
+        case 10:
+        {
+            FILE* fileCheck = fopen("redo1.txt", "r");
+            if (fileCheck != NULL)
+            {
+
+                fclose(fileCheck);
+
+
+                remove("undo3.txt");
+                rename("undo2.txt", "undo3.txt");
+                remove("undo2.txt");
+                rename("undo1.txt", "undo2.txt");
+                SaveWithName("undo1.txt", head);
+
+
+
+                FreeList(head);
+                head = LoadWithName("redo1.txt");
+
+                remove("redo1.txt");
+                rename("redo2.txt", "redo1.txt");
+                remove("redo2.txt");
+                rename("redo3.txt", "redo2.txt");
+            }
+            else
+            {
+                printf("Файл не існує.\n");
+            }
+
+
+            break;
+        }
+        case 11:
+        {
+            remove("undo3.txt");
+            rename("undo2.txt", "undo3.txt");
+            remove("undo2.txt");
+            rename("undo1.txt", "undo2.txt");
+            SaveWithName("undo1.txt", head);
+            remove("redo1.txt");
+            remove("redo2.txt");
+            remove("redo3.txt");
+
+
+            int line;
+            int index;
+            int length;
+            printf(">Choose line: ");
+            if (scanf_s("%d", &line) != 1) return;
+            printf(">Choose index: ");
+            if (scanf_s("%d", &index) != 1) return;
+            printf(">Choose length: ");
+            if (scanf_s("%d", &length) != 1) return;
+            Copy(head, line, index, length);
+
+            break;
+        }
+        case 12:
+        {
+            remove("undo3.txt");
+            rename("undo2.txt", "undo3.txt");
+            remove("undo2.txt");
+            rename("undo1.txt", "undo2.txt");
+            SaveWithName("undo1.txt", head);
+            remove("redo1.txt");
+            remove("redo2.txt");
+            remove("redo3.txt");
+
+
+            int line;
+            int index;
+            int length;
+            printf(">Choose line: ");
+            if (scanf_s("%d", &line) != 1) return;
+            printf(">Choose index: ");
+            if (scanf_s("%d", &index) != 1) return;
+            printf(">Choose length: ");
+            if (scanf_s("%d", &length) != 1) return;
+
+            Copy(head, line, index, length);
+            head = DeleteCase(head, line, index, length);
+            break;
+        }
+        case 13:
+        {
+            remove("undo3.txt");
+            rename("undo2.txt", "undo3.txt");
+            remove("undo2.txt");
+            rename("undo1.txt", "undo2.txt");
+            SaveWithName("undo1.txt", head);
+            remove("redo1.txt");
+            remove("redo2.txt");
+            remove("redo3.txt");
+
+            int line;
+            int index;
+            
+            printf(">Choose line: ");
+            if (scanf_s("%d", &line) != 1) return;
+            printf(">Choose index: ");
+            if (scanf_s("%d", &index) != 1) return;
+            Node* pasteNode = LoadWithName("copy.txt");
+            head = PasteInsertion(head, pasteNode, line, index);
+            break;
+        }
+        case 14:
+        {
+            remove("undo3.txt");
+            rename("undo2.txt", "undo3.txt");
+            remove("undo2.txt");
+            rename("undo1.txt", "undo2.txt");
+            SaveWithName("undo1.txt", head);
+            remove("redo1.txt");
+            remove("redo2.txt");
+            remove("redo3.txt");
+
+            int line;
+            int index;
+
+            printf(">Choose line: ");
+            if (scanf_s("%d", &line) != 1) return;
+            printf(">Choose index: ");
+            if (scanf_s("%d", &index) != 1) return;
+            head = InsertWithReplasement(head, line, index);
+            break;
+
+        }
+        case 15:
             printf("Program is finished");
             return 0;
         default:
