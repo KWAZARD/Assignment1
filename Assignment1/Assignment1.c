@@ -167,7 +167,7 @@ int main()
             }
             else
             {
-                printf("Файл не існує.\n");
+                printf("File does not exist.\n");
             }
                 
             
@@ -200,7 +200,7 @@ int main()
             }
             else
             {
-                printf("Файл не існує.\n");
+                printf("File does not exist.\n");
             }
 
 
@@ -222,11 +222,23 @@ int main()
             int index;
             int length;
             printf(">Choose line: ");
-            if (scanf_s("%d", &line) != 1) return;
+            if (scanf_s("%d", &line) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
             printf(">Choose index: ");
-            if (scanf_s("%d", &index) != 1) return;
+            if (scanf_s("%d", &index) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
             printf(">Choose length: ");
-            if (scanf_s("%d", &length) != 1) return;
+            if (scanf_s("%d", &length) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
             Copy(head, line, index, length);
 
             break;
@@ -247,11 +259,23 @@ int main()
             int index;
             int length;
             printf(">Choose line: ");
-            if (scanf_s("%d", &line) != 1) return;
+            if (scanf_s("%d", &line) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
             printf(">Choose index: ");
-            if (scanf_s("%d", &index) != 1) return;
+            if (scanf_s("%d", &index) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
             printf(">Choose length: ");
-            if (scanf_s("%d", &length) != 1) return;
+            if (scanf_s("%d", &length) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
 
             Copy(head, line, index, length);
             head = DeleteCase(head, line, index, length);
@@ -270,11 +294,19 @@ int main()
 
             int line;
             int index;
-            
             printf(">Choose line: ");
-            if (scanf_s("%d", &line) != 1) return;
+            if (scanf_s("%d", &line) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
             printf(">Choose index: ");
-            if (scanf_s("%d", &index) != 1) return;
+            if (scanf_s("%d", &index) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
+            
             Node* pasteNode = LoadWithName("copy.txt");
             head = PasteInsertion(head, pasteNode, line, index);
             break;
@@ -292,11 +324,19 @@ int main()
 
             int line;
             int index;
-
             printf(">Choose line: ");
-            if (scanf_s("%d", &line) != 1) return;
+            if (scanf_s("%d", &line) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
             printf(">Choose index: ");
-            if (scanf_s("%d", &index) != 1) return;
+            if (scanf_s("%d", &index) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
+            
             head = InsertWithReplasement(head, line, index);
             break;
 
