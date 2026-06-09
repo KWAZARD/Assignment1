@@ -121,11 +121,23 @@ int main()
             int index;
             int length;
             printf(">Choose line: ");
-            if (scanf_s("%d", &line) != 1) return;
+            if (scanf_s("%d", &line) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
             printf(">Choose index: ");
-            if (scanf_s("%d", &index) != 1) return;
+            if (scanf_s("%d", &index) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
             printf(">Choose length: ");
-            if (scanf_s("%d", &length) != 1) return;
+            if (scanf_s("%d", &length) != 1)
+            {
+                printf("Wrong input\n");
+                break;
+            }
             head = DeleteCase(head, line, index, length);
             
             
