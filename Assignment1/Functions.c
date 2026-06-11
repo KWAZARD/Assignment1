@@ -453,10 +453,6 @@ void Copy(Node* head, int line, int index, int length)
 Node* PasteInsertion(Node* head, Node* insertedHead, int line, int index)
 {
     
-
-   
-
-
     if (insertedHead == NULL) return head;
 
 

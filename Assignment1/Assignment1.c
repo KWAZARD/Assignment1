@@ -15,6 +15,8 @@
 
 static Node* head = NULL;
 static Node* last = NULL;
+int line = -1;
+int index = -1;
 
 int main()
 {
@@ -34,6 +36,7 @@ int main()
         "12-Cut\n"
         "13-Paste\n"
         "14-Insert with replacement\n"
+        "15-Cursor placement\n"
         "15-Finish program\n"
         ">Choose options\n");
 
@@ -53,6 +56,7 @@ int main()
         switch (user_choise)
         {
         case 1:
+            
             remove("undo3.txt");
             rename("undo2.txt", "undo3.txt");
             remove("undo2.txt");
@@ -108,6 +112,11 @@ int main()
         
         case 8:
         {
+            if (index == -1 || line == -1)
+            {
+                printf("Your cursor is not put\n");
+                break;
+            }
             remove("undo3.txt");
             rename("undo2.txt", "undo3.txt");
             remove("undo2.txt");
@@ -117,21 +126,9 @@ int main()
             remove("redo2.txt");
             remove("redo3.txt");
 
-            int line;
-            int index;
+            
             int length;
-            printf(">Choose line: ");
-            if (scanf_s("%d", &line) != 1)
-            {
-                printf("Wrong input\n");
-                break;
-            }
-            printf(">Choose index: ");
-            if (scanf_s("%d", &index) != 1)
-            {
-                printf("Wrong input\n");
-                break;
-            }
+            
             printf(">Choose length: ");
             if (scanf_s("%d", &length) != 1)
             {
@@ -208,6 +205,11 @@ int main()
         }
         case 11:
         {
+            if (index == -1 || line == -1)
+            {
+                printf("Your cursor is not put\n");
+                break;
+            }
             remove("undo3.txt");
             rename("undo2.txt", "undo3.txt");
             remove("undo2.txt");
@@ -218,21 +220,9 @@ int main()
             remove("redo3.txt");
 
 
-            int line;
-            int index;
+            
             int length;
-            printf(">Choose line: ");
-            if (scanf_s("%d", &line) != 1)
-            {
-                printf("Wrong input\n");
-                break;
-            }
-            printf(">Choose index: ");
-            if (scanf_s("%d", &index) != 1)
-            {
-                printf("Wrong input\n");
-                break;
-            }
+            
             printf(">Choose length: ");
             if (scanf_s("%d", &length) != 1)
             {
@@ -245,6 +235,11 @@ int main()
         }
         case 12:
         {
+            if (index == -1 || line == -1)
+            {
+                printf("Your cursor is not put\n");
+                break;
+            }
             remove("undo3.txt");
             rename("undo2.txt", "undo3.txt");
             remove("undo2.txt");
@@ -255,21 +250,9 @@ int main()
             remove("redo3.txt");
 
 
-            int line;
-            int index;
+            
             int length;
-            printf(">Choose line: ");
-            if (scanf_s("%d", &line) != 1)
-            {
-                printf("Wrong input\n");
-                break;
-            }
-            printf(">Choose index: ");
-            if (scanf_s("%d", &index) != 1)
-            {
-                printf("Wrong input\n");
-                break;
-            }
+           
             printf(">Choose length: ");
             if (scanf_s("%d", &length) != 1)
             {
@@ -283,6 +266,11 @@ int main()
         }
         case 13:
         {
+            if (index == -1 || line == -1)
+            {
+                printf("Your cursor is not put\n");
+                break;
+            }
             remove("undo3.txt");
             rename("undo2.txt", "undo3.txt");
             remove("undo2.txt");
@@ -292,20 +280,7 @@ int main()
             remove("redo2.txt");
             remove("redo3.txt");
 
-            int line;
-            int index;
-            printf(">Choose line: ");
-            if (scanf_s("%d", &line) != 1)
-            {
-                printf("Wrong input\n");
-                break;
-            }
-            printf(">Choose index: ");
-            if (scanf_s("%d", &index) != 1)
-            {
-                printf("Wrong input\n");
-                break;
-            }
+            
             
             Node* pasteNode = LoadWithName("copy.txt");
             head = PasteInsertion(head, pasteNode, line, index);
@@ -313,6 +288,11 @@ int main()
         }
         case 14:
         {
+            if (index == -1 || line == -1)
+            {
+                printf("Your cursor is not put\n");
+                break;
+            }
             remove("undo3.txt");
             rename("undo2.txt", "undo3.txt");
             remove("undo2.txt");
@@ -322,8 +302,14 @@ int main()
             remove("redo2.txt");
             remove("redo3.txt");
 
-            int line;
-            int index;
+           
+            
+            head = InsertWithReplasement(head, line, index);
+            break;
+
+        }
+        case 15:
+            printf("Cursor input:\n");
             printf(">Choose line: ");
             if (scanf_s("%d", &line) != 1)
             {
@@ -336,12 +322,8 @@ int main()
                 printf("Wrong input\n");
                 break;
             }
-            
-            head = InsertWithReplasement(head, line, index);
             break;
-
-        }
-        case 15:
+        case 16:
             printf("Program is finished");
             return 0;
         default:
